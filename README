@@ -1,0 +1,51 @@
+======
+README:
+======
+
+===========
+Zip Content:
+===========
+1. BulkHash.tar: 
+Cisco provided image for which signature is to be verified.
+
+2. BULKHASH-CCO_RELEASE.cer: 
+Cisco signed x.509 end-entity certificate containing public key that can be used to 
+verify the signature. This certificate is chained to Cisco root posted on 
+http://www.cisco.com/security/pki/certs/crcam2.cer
+
+3. BulkHash.tar.signature: 
+Signature generated for the image.
+
+4. cisco_x509_verify_release.py : 
+Signature verification program. After downloading image, 
+its digital signature, and the x.509 certificate, this program can be 
+used to verify the 3-tier x.509 certificate chain and signature. Certificate
+chain validation is done by verifying the authenticity of end-entity 
+certificate using Cisco's SubCA and root CA certificate. Then this authentic
+end-entity certificate is used to verify the signature.
+
+5. README: This file.
+
+============
+Requirements:
+============
+1. Python 2.7.4 or later
+2. OpenSSL
+
+=========================================
+How to run signature verification program:
+=========================================
+Example:
+python cisco_x509_verify_release.py -e BULKHASH-CCO_RELEASE.cer -i BulkHash.tar -s BulkHash.tar.signature -v dgst -sha512
+
+===============
+Expected output:
+===============
+Downloading CA certificate from http://www.cisco.com/security/pki/certs/crcam2.cer ...
+Successfully downloaded and verified crcam2.cer.
+Downloading SubCA certificate from http://www.cisco.com/security/pki/certs/innerspace.cer ...
+Successfully downloaded and verified innerspace.cer.
+Successfully verified root, subca and end-entity certificate chain.
+Successfully verified the signature of BulkHash.tar using BULKHASH-CCO_RELEASE.cer
+
+    
